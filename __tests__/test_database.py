@@ -1,4 +1,4 @@
-from iorm import Database
+from faviorm import Database
 
 
 def test_database() -> None:

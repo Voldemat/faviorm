@@ -5,7 +5,7 @@ from setuptools import find_packages, setup  # type: ignore [import]
 
 
 setup(
-    name="iorm",
+    name="faviorm",
     version=os.environ["GITHUB_REF_NAME"],
     description="ASGI webserver",
     author="Vladimir Vojtenko",
