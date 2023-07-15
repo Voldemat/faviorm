@@ -1,26 +1,18 @@
-import hashlib
-
-from .isql_struct import ISqlStruct
-from .table import Table
+from .idatabase import IDatabase
+from .itable import ITable
 
 
-class Database(ISqlStruct):
+class Database(IDatabase):
     name: str
-    tables: list[Table]
+    tables: list[ITable]
 
     def __init__(self, name: str) -> None:
         self.name = name
 
-    def get_tables(self) -> list[Table]:
+    def get_tables(self) -> list[ITable]:
         tables = []
         for key in dir(self):
             v = getattr(self, key)
-            if isinstance(v, Table):
+            if isinstance(v, ITable):
                 tables.append(v)
         return tables
-
-    def get_sql_hash(self) -> bytes:
-        h = hashlib.md5(self.name.encode())
-        for t in self.get_tables():
-            h.update(t.get_sql_hash())
-        return h.digest()

@@ -1,9 +1,10 @@
 import hashlib
 
-from .column import Column, UUID, VARCHAR
-from .database import Database
+from .icolumn import IColumn
+from .idatabase import IDatabase
 from .isql_struct import ISqlStruct
-from .table import Table
+from .itable import ITable
+from .itype import IType
 
 
-__all__ = ("Table", "Database", "UUID", "VARCHAR", "Column")
+__all__ = ("ITable", "IDatabase", "IColumn", "IType")

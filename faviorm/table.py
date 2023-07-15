@@ -1,7 +1,6 @@
-import hashlib
-
 from .column import Column
-from .isql_struct import ISqlStruct
+from .ihasher import IHasher
+from .isql_struct import ISqlStruct, map_get_sql_hash
 
 
 class Table(ISqlStruct):
@@ -18,8 +17,10 @@ class Table(ISqlStruct):
                 columns.append(v)
         return columns
 
-    def get_sql_hash(self) -> bytes:
-        h = hashlib.md5(self.table_name.encode())
-        for c in self.get_columns():
-            h.update(c.get_sql_hash())
-        return h.digest()
+    def get_sql_hash(self, hasher: IHasher) -> bytes:
+        return hasher.hash(
+            [
+                self.table_name.encode(),
+                *list(map_get_sql_hash(hasher, self.get_columns())),
+            ]
+        )
