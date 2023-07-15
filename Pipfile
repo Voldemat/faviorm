@@ -12,6 +12,8 @@ mypy = "*"
 flake8-import-order = "*"
 pytest = "*"
 ipython = "*"
+coverage = "*"
+pdoc = "*"
 
 [requires]
 python_version = "3.11"
