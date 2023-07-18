@@ -1,26 +1,23 @@
-from .column import Column
-from .ihasher import IHasher
-from .isql_struct import ISqlStruct, map_get_sql_hash
+from .icolumn import IColumn
+from .itable import ITable
 
 
-class Table(ISqlStruct):
+class Table(ITable):
     table_name: str
 
     def __init__(self, name: str) -> None:
         self.table_name = name
 
-    def get_columns(self) -> list[Column]:
+    def __hash__(self) -> int:
+        return hash((self.table_name, *self.get_columns()))
+
+    def get_name(self) -> str:
+        return self.table_name
+
+    def get_columns(self) -> list[IColumn]:
         columns = []
         for key in dir(self):
             v = getattr(self, key)
-            if isinstance(v, Column):
+            if isinstance(v, IColumn):
                 columns.append(v)
         return columns
-
-    def get_sql_hash(self, hasher: IHasher) -> bytes:
-        return hasher.hash(
-            [
-                self.table_name.encode(),
-                *list(map_get_sql_hash(hasher, self.get_columns())),
-            ]
-        )

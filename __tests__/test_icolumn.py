@@ -11,6 +11,9 @@ def test_icolumn(name: str) -> None:
     t_type.get_sql_hash = mock.MagicMock(return_value=b"t_type")
 
     class TestColumn(faviorm.IColumn):
+        def __hash__(self) -> int:
+            return hash((name, t_type))
+
         def get_name(self) -> str:
             return name
 

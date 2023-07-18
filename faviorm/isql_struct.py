@@ -1,13 +1,20 @@
 from abc import ABC, abstractmethod
+from collections.abc import Hashable
 from typing import Iterable
 
 from .ihasher import IHasher
 
 
-class ISqlStruct(ABC):
+class ISqlStruct(ABC, Hashable):
     @abstractmethod
     def get_sql_hash(self, hasher: IHasher) -> bytes:
         pass
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ISqlStruct):
+            return False
+
+        return hash(self) == hash(other)
 
 
 def map_get_sql_hash(

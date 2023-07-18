@@ -13,6 +13,9 @@ def test_itable(name: str) -> None:
     name_column.get_sql_hash = mock.MagicMock(return_value=b"name_column")
 
     class MainTable(faviorm.ITable):
+        def __hash__(self) -> int:
+            return hash((name, id_column, name_column))
+
         def get_name(self) -> str:
             return name
 

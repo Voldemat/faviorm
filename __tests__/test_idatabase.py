@@ -13,6 +13,9 @@ def test_idatabase(name: str) -> None:
     table2.get_sql_hash = mock.MagicMock(return_value=b"table2")
 
     class MainDatabase(faviorm.IDatabase):
+        def __hash__(self) -> int:
+            return hash((name, table1, table2))
+
         def get_name(self) -> str:
             return name
 
