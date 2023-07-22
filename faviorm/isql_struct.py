@@ -10,6 +10,10 @@ class ISqlStruct(ABC, Hashable):
     def get_sql_hash(self, hasher: IHasher) -> bytes:
         pass
 
+    @abstractmethod
+    def get_params_hash(self, hasher: IHasher) -> bytes:
+        pass
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ISqlStruct):
             return False

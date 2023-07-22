@@ -26,6 +26,7 @@ def test_idatabase(name: str) -> None:
     hasher = mock.MagicMock()
     hasher.hash = mock.MagicMock(return_value=b"1")
     assert db.get_sql_hash(hasher) == b"1"
-    assert hasher.hash.call_count == 1
+    assert hasher.hash.call_count == 2
     call_args = hasher.hash.call_args_list
-    assert call_args[0].args == ([name.encode(), b"table1", b"table2"],)
+    assert call_args[0].args == ([b"table1", b"table2"],)
+    assert call_args[1].args == ([name.encode(), b"1"],)

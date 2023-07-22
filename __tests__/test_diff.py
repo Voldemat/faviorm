@@ -1,5 +1,7 @@
 import faviorm
 
+hasher = faviorm.MD5Hasher()
+
 
 def test_diff_name() -> None:
     class D(faviorm.Database):
@@ -7,7 +9,7 @@ def test_diff_name() -> None:
 
     d1 = D("d1")
     d2 = D("d2")
-    diff = faviorm.diff(d1, d2)
+    diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {
         "name": ["d1", "d2"],
     }
@@ -25,8 +27,12 @@ def test_diff_tables_names() -> None:
 
     d1 = D1("same name")
     d2 = D2("same name")
-    diff = faviorm.diff(d1, d2)
-    assert diff == {"tables": {"added": ["files"], "removed": ["users"]}}, diff
+    diff = faviorm.diff(d1, d2, hasher=hasher)
+    assert diff == {
+        "tables": {
+            "renamed": [{"from": "users", "to": "files"}],
+        }
+    }, diff
 
 
 def test_not_diff_with_different_tables_classes() -> None:
@@ -44,5 +50,5 @@ def test_not_diff_with_different_tables_classes() -> None:
 
     d1 = D1("same name")
     d2 = D2("same name")
-    diff = faviorm.diff(d1, d2)
+    diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {}, diff

@@ -1,7 +1,6 @@
-import hashlib
-
 from .database import Database
 from .difference import diff
+from .hashers import MD5Hasher
 from .icolumn import IColumn
 from .idatabase import IDatabase
 from .isql_struct import ISqlStruct
@@ -18,4 +17,5 @@ __all__ = (
     "diff",
     "Database",
     "Table",
+    "MD5Hasher",
 )

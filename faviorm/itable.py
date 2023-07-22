@@ -18,6 +18,9 @@ class ITable(ISqlStruct):
         return hasher.hash(
             [
                 self.get_name().encode(),
-                *list(map_get_sql_hash(hasher, self.get_columns())),
+                self.get_params_hash(hasher),
             ]
         )
+
+    def get_params_hash(self, hasher: IHasher) -> bytes:
+        return hasher.hash(list(map_get_sql_hash(hasher, self.get_columns())))

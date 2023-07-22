@@ -26,7 +26,7 @@ def test_itable(name: str) -> None:
     hasher = mock.MagicMock()
     hasher.hash = mock.MagicMock(return_value=b"1")
     assert table.get_sql_hash(hasher) == b"1"
-    assert hasher.hash.call_count == 1
-    assert hasher.hash.call_args.args == (
-        [name.encode(), b"id_column", b"name_column"],
-    )
+    assert hasher.hash.call_count == 2
+    call_args = hasher.hash.call_args_list
+    assert call_args[0].args == ([b"id_column", b"name_column"],)
+    assert call_args[1].args == ([name.encode(), b"1"],)
