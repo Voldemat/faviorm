@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 
+from .icolumn import IColumn
 from .ihasher import IHasher
-from .isql_struct import ISqlStruct
+from .itype import IType
 
 
-class UUID(ISqlStruct):
+class UUID(IType):
     def __hash__(self) -> int:
         return hash("UUID")
 
@@ -13,7 +14,7 @@ class UUID(ISqlStruct):
 
 
 @dataclass
-class VARCHAR(ISqlStruct):
+class VARCHAR(IType):
     max_length: int
 
     def __hash__(self) -> int:
@@ -23,18 +24,16 @@ class VARCHAR(ISqlStruct):
         return hasher.hash(f"VARCHAR{self.max_length}".encode())
 
 
-COLUMN_TYPE = UUID | VARCHAR
-
-
 @dataclass
-class Column(ISqlStruct):
+class Column(IColumn):
     name: str
-    type: COLUMN_TYPE
+    type: IType
 
     def __hash__(self) -> int:
         return hash((self.name, self.type))
 
-    def get_sql_hash(self, hasher: IHasher) -> bytes:
-        return hasher.hash(
-            [self.name.encode(), self.type.get_sql_hash(hasher)]
-        )
+    def get_name(self) -> str:
+        return self.name
+
+    def get_type(self) -> IType:
+        return self.type

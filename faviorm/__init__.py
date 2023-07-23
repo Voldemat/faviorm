@@ -1,3 +1,4 @@
+from .column import Column, UUID
 from .database import Database
 from .difference import diff
 from .hashers import MD5Hasher
@@ -18,4 +19,6 @@ __all__ = (
     "Database",
     "Table",
     "MD5Hasher",
+    "Column",
+    "UUID",
 )
