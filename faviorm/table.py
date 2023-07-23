@@ -15,9 +15,9 @@ class Table(ITable):
         return self.table_name
 
     def get_columns(self) -> list[IColumn]:
-        columns = []
-        for key in dir(self):
-            v = getattr(self, key)
-            if isinstance(v, IColumn):
-                columns.append(v)
-        return columns
+        return list(
+            filter(
+                lambda v: isinstance(v, IColumn),
+                map(lambda key: getattr(self, key), dir(self)),
+            )
+        )

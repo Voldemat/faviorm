@@ -15,9 +15,12 @@ class Database(IDatabase):
         return self.name
 
     def get_tables(self) -> list[ITable]:
-        tables = []
-        for key in dir(self):
-            v = getattr(self, key)
-            if isinstance(v, ITable):
-                tables.append(v)
-        return tables
+        return list(
+            filter(
+                lambda v: isinstance(v, ITable),
+                map(
+                    lambda key: getattr(self, key),
+                    dir(self),
+                ),
+            )
+        )
