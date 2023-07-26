@@ -3,18 +3,6 @@ import faviorm
 hasher = faviorm.MD5Hasher()
 
 
-def test_diff_name() -> None:
-    class D(faviorm.Database):
-        pass
-
-    d1 = D("d1")
-    d2 = D("d2")
-    diff = faviorm.diff(d1, d2, hasher=hasher)
-    assert diff == {
-        "name": ["d1", "d2"],
-    }
-
-
 def test_diff_tables_names() -> None:
     class UsersTable(faviorm.Table):
         pass
@@ -25,8 +13,8 @@ def test_diff_tables_names() -> None:
     class D2(faviorm.Database):
         users = UsersTable("files")
 
-    d1 = D1("same name")
-    d2 = D2("same name")
+    d1 = D1()
+    d2 = D2()
     diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {
         "tables": {
@@ -50,8 +38,8 @@ def test_not_diff_with_different_tables_classes() -> None:
     class D2(faviorm.Database):
         users = Users2Table("users")
 
-    d1 = D1("same name")
-    d2 = D2("same name")
+    d1 = D1()
+    d2 = D2()
     diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {}, diff
 
@@ -69,8 +57,8 @@ def test_diff_added_column_and_removed_column() -> None:
     class D2(faviorm.Database):
         users = Users2Table("users")
 
-    d1 = D1("same name")
-    d2 = D2("same name")
+    d1 = D1()
+    d2 = D2()
     diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {
         "tables": {
@@ -99,8 +87,8 @@ def test_diff_rename_column() -> None:
     class D2(faviorm.Database):
         users = Users2Table("users")
 
-    d1 = D1("same name")
-    d2 = D2("same name")
+    d1 = D1()
+    d2 = D2()
     diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {
         "tables": {
@@ -122,8 +110,8 @@ def test_diff_change_type_of_column() -> None:
     class D2(faviorm.Database):
         users = Users2Table("users")
 
-    d1 = D1("same name")
-    d2 = D2("same name")
+    d1 = D1()
+    d2 = D2()
     diff = faviorm.diff(d1, d2, hasher=hasher)
     assert diff == {
         "tables": {
