@@ -1,8 +1,9 @@
-from typing import Any
+from typing import AbstractSet, Any
 
 from .icolumn import IColumn
 from .idatabase import IDatabase
 from .ihasher import IHasher
+from .isql_struct import ISqlStruct
 from .itable import ITable
 
 
@@ -24,7 +25,7 @@ def get_tables_diff(
 ) -> dict[str, Any] | None:
     removed_tables = d1_tables - d2_tables
     added_tables = d2_tables - d1_tables
-    renamed_tables_map = get_renamed_tables(
+    renamed_tables_map = get_renamed_structures(
         removed_tables, added_tables, hasher
     )
     removed_tables = set(
@@ -63,16 +64,18 @@ def get_tables_diff(
     return tables_dif if tables_dif != {} else None
 
 
-def get_renamed_tables(
-    removed_tables: set[ITable], added_tables: set[ITable], hasher: IHasher
+def get_renamed_structures(
+    removed: AbstractSet[ISqlStruct],
+    added: AbstractSet[ISqlStruct],
+    hasher: IHasher,
 ) -> dict[str, str]:
-    added_tables_map = {t.get_params_hash(hasher): t for t in added_tables}
-    renamed_tables_map: dict[str, str] = {}
-    for t in removed_tables:
+    added_map = {t.get_params_hash(hasher): t for t in added}
+    renamed_map: dict[str, str] = {}
+    for t in removed:
         p_hash = t.get_params_hash(hasher)
-        if t2 := added_tables_map.pop(p_hash, None):
-            renamed_tables_map[t.get_name()] = t2.get_name()
-    return renamed_tables_map
+        if t2 := added_map.pop(p_hash, None):
+            renamed_map[t.get_name()] = t2.get_name()
+    return renamed_map
 
 
 def get_changed_tables(
@@ -98,9 +101,56 @@ def get_columns_diff(
     t2_columns_set = set(t2_columns)
     removed_columns = t1_columns_set - t2_columns_set
     added_columns = t2_columns_set - t1_columns_set
-    columns_diff = {}
+    renamed_columns_map = get_renamed_structures(
+        removed_columns, added_columns, hasher
+    )
+    removed_columns = set(
+        filter(
+            lambda v: v.get_name() not in renamed_columns_map, removed_columns
+        )
+    )
+    added_columns = set(
+        filter(
+            lambda v: v.get_name() not in renamed_columns_map.values(),
+            added_columns,
+        )
+    )
+    changed_columns: dict[str, Any] = get_changed_columns(
+        removed_columns, added_columns, hasher
+    )
+    removed_columns = set(
+        filter(lambda v: v.get_name() not in changed_columns, removed_columns)
+    )
+    added_columns = set(
+        filter(
+            lambda v: v.get_name() not in changed_columns,
+            added_columns,
+        )
+    )
+    columns_diff: dict[str, Any] = {}
+    if len(renamed_columns_map) > 0:
+        columns_diff["renamed"] = renamed_columns_map
     if len(removed_columns) > 0:
         columns_diff["removed"] = list(removed_columns)
     if len(added_columns) > 0:
         columns_diff["added"] = list(added_columns)
+    if len(changed_columns) > 0:
+        columns_diff["changed"] = changed_columns
     return columns_diff
+
+
+def get_changed_columns(
+    removed: set[IColumn], added: set[IColumn], hasher: IHasher
+) -> dict[str, Any]:
+    added_map = {c.get_name(): c for c in added}
+    changed_map: dict[str, Any] = {}
+    for c in removed:
+        name = c.get_name()
+        if c2 := added_map.get(name, None):
+            changes = {}
+            if c.get_type().get_params_hash(
+                hasher
+            ) != c2.get_type().get_params_hash(hasher):
+                changes["type"] = {"from": c.get_type(), "to": c2.get_type()}
+            changed_map[name] = changes
+    return changed_map

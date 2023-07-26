@@ -7,8 +7,13 @@ from .ihasher import IHasher
 
 class ISqlStruct(ABC, Hashable):
     @abstractmethod
-    def get_sql_hash(self, hasher: IHasher) -> bytes:
+    def get_name(self) -> str:
         pass
+
+    def get_sql_hash(self, hasher: IHasher) -> bytes:
+        return hasher.hash(
+            [self.get_name().encode(), self.get_params_hash(hasher)]
+        )
 
     @abstractmethod
     def get_params_hash(self, hasher: IHasher) -> bytes:
