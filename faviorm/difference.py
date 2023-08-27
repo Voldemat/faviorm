@@ -152,9 +152,7 @@ def get_changed_columns(
                 hasher
             ) != c2.get_type().get_params_hash(hasher):
                 changes["type"] = {"from": c.get_type(), "to": c2.get_type()}
-            if c.get_is_nullable().get_params_hash(
-                hasher
-            ) != c2.get_is_nullable().get_params_hash(hasher):
+            if c.get_nullable_hash(hasher) != c2.get_nullable_hash(hasher):
                 changes["nullable"] = {
                     "from": c.get_is_nullable(),
                     "to": c2.get_is_nullable(),

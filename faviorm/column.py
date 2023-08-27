@@ -3,7 +3,6 @@ from typing import Literal
 
 from .icolumn import IColumn
 from .ihasher import IHasher
-from .inullable import INullable
 from .itype import IType
 
 
@@ -33,24 +32,10 @@ class VARCHAR(IType):
 
 
 @dataclass
-class Nullable(INullable):
-    nullable: bool
-
-    def get_name(self) -> str:
-        return "Nullable"
-
-    def __hash__(self) -> int:
-        return hash(self.nullable)
-
-    def get_params_hash(self, hasher: IHasher) -> bytes:
-        return hasher.hash(bytes(self.nullable))
-
-
-@dataclass
 class Column(IColumn):
     name: str
     type: IType
-    nullable: INullable
+    nullable: bool
 
     def __hash__(self) -> int:
         return hash((self.name, self.type, self.nullable))
@@ -61,5 +46,5 @@ class Column(IColumn):
     def get_type(self) -> IType:
         return self.type
 
-    def get_is_nullable(self) -> INullable:
+    def get_is_nullable(self) -> bool:
         return self.nullable

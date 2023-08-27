@@ -46,14 +46,10 @@ def test_not_diff_with_different_tables_classes() -> None:
 
 def test_diff_added_column_and_removed_column() -> None:
     class UsersTable(faviorm.Table):
-        name = faviorm.Column(
-            "name", faviorm.VARCHAR(255), faviorm.Nullable(nullable=True)
-        )
+        name = faviorm.Column("name", faviorm.VARCHAR(255), True)
 
     class Users2Table(faviorm.Table):
-        id = faviorm.Column(
-            "id", faviorm.UUID(), faviorm.Nullable(nullable=True)
-        )
+        id = faviorm.Column("id", faviorm.UUID(), True)
 
     class D1(faviorm.Database):
         users = UsersTable("users")
@@ -80,14 +76,10 @@ def test_diff_added_column_and_removed_column() -> None:
 
 def test_diff_rename_column() -> None:
     class UsersTable(faviorm.Table):
-        name = faviorm.Column(
-            "name", faviorm.VARCHAR(255), faviorm.Nullable(nullable=True)
-        )
+        name = faviorm.Column("name", faviorm.VARCHAR(255), True)
 
     class Users2Table(faviorm.Table):
-        id = faviorm.Column(
-            "id", faviorm.VARCHAR(255), faviorm.Nullable(nullable=True)
-        )
+        id = faviorm.Column("id", faviorm.VARCHAR(255), True)
 
     class D1(faviorm.Database):
         users = UsersTable("users")
@@ -107,14 +99,10 @@ def test_diff_rename_column() -> None:
 
 def test_diff_change_type_of_column() -> None:
     class UsersTable(faviorm.Table):
-        id = faviorm.Column(
-            "id", faviorm.VARCHAR(255), faviorm.Nullable(nullable=True)
-        )
+        id = faviorm.Column("id", faviorm.VARCHAR(255), True)
 
     class Users2Table(faviorm.Table):
-        id = faviorm.Column(
-            "id", faviorm.UUID(), faviorm.Nullable(nullable=True)
-        )
+        id = faviorm.Column("id", faviorm.UUID(), True)
 
     class D1(faviorm.Database):
         users = UsersTable("users")
@@ -147,14 +135,10 @@ def test_diff_change_type_of_column() -> None:
 
 def test_diff_change_nullable_value_of_column() -> None:
     class UsersTable(faviorm.Table):
-        id = faviorm.Column(
-            "id", faviorm.UUID(), faviorm.Nullable(nullable=True)
-        )
+        id = faviorm.Column("id", faviorm.UUID(), True)
 
     class Users2Table(faviorm.Table):
-        id = faviorm.Column(
-            "id", faviorm.UUID(), faviorm.Nullable(nullable=False)
-        )
+        id = faviorm.Column("id", faviorm.UUID(), False)
 
     class D1(faviorm.Database):
         users = UsersTable("users")

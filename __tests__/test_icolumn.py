@@ -20,12 +20,12 @@ def test_icolumn(name: str) -> None:
         def get_type(self) -> faviorm.IType:
             return t_type
 
-        def get_is_nullable(self) -> faviorm.INullable:
-            return faviorm.Nullable(nullable=True)
+        def get_is_nullable(self) -> bool:
+            return True
 
     column = TestColumn()
     hasher = mock.MagicMock()
     hasher.hash = mock.MagicMock(return_value=b"1")
     assert column.get_sql_hash(hasher) == b"1"
-    assert hasher.hash.call_count == 4
+    assert hasher.hash.call_count == 2
     assert hasher.hash.call_args.args == ([name.encode(), b"1"],)

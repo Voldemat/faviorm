@@ -1,8 +1,7 @@
 from abc import abstractmethod
 
 from .ihasher import IHasher
-from .inullable import INullable
-from .isql_struct import ISqlStruct, map_get_sql_hash
+from .isql_struct import ISqlStruct
 from .itype import IType
 
 
@@ -12,14 +11,16 @@ class IColumn(ISqlStruct):
         pass
 
     @abstractmethod
-    def get_is_nullable(self) -> INullable:
+    def get_is_nullable(self) -> bool:
         pass
+
+    def get_nullable_hash(self, hasher: IHasher) -> bytes:
+        return hasher.hash(bytes(self.get_is_nullable()))
 
     def get_params_hash(self, hasher: IHasher) -> bytes:
         return hasher.hash(
-            list(
-                map_get_sql_hash(
-                    hasher, [self.get_is_nullable(), self.get_type()]
-                )
-            )
+            [
+                self.get_type().get_sql_hash(hasher),
+                bytes(self.get_is_nullable()),
+            ]
         )
