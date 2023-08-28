@@ -10,5 +10,14 @@ class IColumn(ISqlStruct):
     def get_type(self) -> IType:
         pass
 
+    @abstractmethod
+    def get_is_nullable(self) -> bool:
+        pass
+
     def get_params_hash(self, hasher: IHasher) -> bytes:
-        return self.get_type().get_sql_hash(hasher)
+        return hasher.hash(
+            [
+                self.get_type().get_sql_hash(hasher),
+                bytes(self.get_is_nullable()),
+            ]
+        )
