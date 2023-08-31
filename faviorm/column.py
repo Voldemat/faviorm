@@ -1,12 +1,14 @@
+import uuid
 from dataclasses import dataclass
-from typing import Literal
+from typing import Generic, Literal
 
 from .icolumn import IColumn
 from .ihasher import IHasher
+from .isql_struct import T
 from .itype import IType
 
 
-class UUID(IType):
+class UUID(IType[uuid.UUID]):
     def get_name(self) -> Literal["UUID"]:
         return "UUID"
 
@@ -18,7 +20,7 @@ class UUID(IType):
 
 
 @dataclass
-class VARCHAR(IType):
+class VARCHAR(IType[str]):
     max_length: int
 
     def get_name(self) -> Literal["VARCHAR"]:
@@ -32,19 +34,28 @@ class VARCHAR(IType):
 
 
 @dataclass
-class Column(IColumn):
+class Column(IColumn[T], Generic[T]):
     name: str
-    type: IType
+    type: IType[T]
     nullable: bool
+    default: T | None = None
 
     def __hash__(self) -> int:
-        return hash((self.name, self.type, self.nullable))
+        return hash((self.name, self.type, self.nullable, self.default))
+
+    def get_default_value_hash(self) -> bytes:
+        if type(self.default) is str:
+            return self.default.encode()
+        return bytes()
 
     def get_name(self) -> str:
         return self.name
 
-    def get_type(self) -> IType:
+    def get_type(self) -> IType[T]:
         return self.type
 
     def get_is_nullable(self) -> bool:
         return self.nullable
+
+    def get_default(self) -> T | None:
+        return self.default

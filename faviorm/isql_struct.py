@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from collections.abc import Hashable
-from typing import Iterable
+from typing import Iterable, TypeVar
 
 from .ihasher import IHasher
+
+T = TypeVar("T")
 
 
 class ISqlStruct(ABC, Hashable):
