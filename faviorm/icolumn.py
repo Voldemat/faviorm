@@ -2,13 +2,13 @@ from abc import abstractmethod
 from typing import Generic
 
 from .ihasher import IHasher
-from .isql_struct import ISqlStruct, T
+from .isql_struct import ISqlStruct, PType
 from .itype import IType
 
 
-class IColumn(ISqlStruct, Generic[T]):
+class IColumn(ISqlStruct, Generic[PType]):
     @abstractmethod
-    def get_type(self) -> IType[T]:
+    def get_type(self) -> IType[PType]:
         pass
 
     @abstractmethod
@@ -16,7 +16,7 @@ class IColumn(ISqlStruct, Generic[T]):
         pass
 
     @abstractmethod
-    def get_default(self) -> T | None:
+    def get_default(self) -> PType | None:
         pass
 
     @abstractmethod

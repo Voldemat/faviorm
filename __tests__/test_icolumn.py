@@ -1,10 +1,9 @@
-from typing import Generic
 from unittest import mock
 
 import pytest
 
 import faviorm
-from faviorm import T
+from faviorm import PType
 
 
 @pytest.mark.parametrize("name", ["main", "test", "check"])
@@ -12,20 +11,20 @@ def test_icolumn(name: str) -> None:
     t_type = mock.MagicMock()
     t_type.get_sql_hash = mock.MagicMock(return_value=b"t_type")
 
-    class TestColumn(faviorm.IColumn[T], Generic[T]):
+    class TestColumn(faviorm.IColumn[PType]):
         def __hash__(self) -> int:
             return hash((name, t_type))
 
         def get_name(self) -> str:
             return name
 
-        def get_type(self) -> faviorm.IType[T]:
+        def get_type(self) -> faviorm.IType[PType]:
             return t_type
 
         def get_is_nullable(self) -> bool:
             return True
 
-        def get_default(self) -> T | None:
+        def get_default(self) -> PType | None:
             return t_type
 
         def get_default_value_hash(self) -> bytes:

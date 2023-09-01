@@ -1,10 +1,10 @@
 import uuid
 from dataclasses import dataclass
-from typing import Generic, Literal
+from typing import Literal
 
 from .icolumn import IColumn
 from .ihasher import IHasher
-from .isql_struct import T
+from .isql_struct import PType
 from .itype import IType
 
 
@@ -34,11 +34,11 @@ class VARCHAR(IType[str]):
 
 
 @dataclass
-class Column(IColumn[T], Generic[T]):
+class Column(IColumn[PType]):
     name: str
-    type: IType[T]
+    type: IType[PType]
     nullable: bool
-    default: T | None = None
+    default: PType | None = None
 
     def __hash__(self) -> int:
         return hash((self.name, self.type, self.nullable, self.default))
@@ -51,11 +51,11 @@ class Column(IColumn[T], Generic[T]):
     def get_name(self) -> str:
         return self.name
 
-    def get_type(self) -> IType[T]:
+    def get_type(self) -> IType[PType]:
         return self.type
 
     def get_is_nullable(self) -> bool:
         return self.nullable
 
-    def get_default(self) -> T | None:
+    def get_default(self) -> PType | None:
         return self.default

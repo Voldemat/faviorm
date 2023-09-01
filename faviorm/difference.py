@@ -3,7 +3,7 @@ from typing import AbstractSet, Any
 from .icolumn import IColumn
 from .idatabase import IDatabase
 from .ihasher import IHasher
-from .isql_struct import ISqlStruct, T
+from .isql_struct import ISqlStruct, PType
 from .itable import ITable
 
 
@@ -95,7 +95,9 @@ def get_changed_tables(
 
 
 def get_columns_diff(
-    t1_columns: list[IColumn[T]], t2_columns: list[IColumn[T]], hasher: IHasher
+    t1_columns: list[IColumn[PType]],
+    t2_columns: list[IColumn[PType]],
+    hasher: IHasher,
 ) -> dict[str, Any]:
     t1_columns_set = set(t1_columns)
     t2_columns_set = set(t2_columns)
@@ -140,7 +142,7 @@ def get_columns_diff(
 
 
 def get_changed_columns(
-    removed: set[IColumn[T]], added: set[IColumn[T]], hasher: IHasher
+    removed: set[IColumn[PType]], added: set[IColumn[PType]], hasher: IHasher
 ) -> dict[str, Any]:
     added_map = {c.get_name(): c for c in added}
     changed_map: dict[str, Any] = {}
