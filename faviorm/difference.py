@@ -147,10 +147,15 @@ def get_changed_columns(
     for c in removed:
         name = c.get_name()
         if c2 := added_map.get(name, None):
-            changes = {}
+            changes: dict[str, Any] = {}
             if c.get_type().get_params_hash(
                 hasher
             ) != c2.get_type().get_params_hash(hasher):
                 changes["type"] = {"from": c.get_type(), "to": c2.get_type()}
+            if c.get_is_nullable() != c2.get_is_nullable():
+                changes["nullable"] = {
+                    "from": c.get_is_nullable(),
+                    "to": c2.get_is_nullable(),
+                }
             changed_map[name] = changes
     return changed_map

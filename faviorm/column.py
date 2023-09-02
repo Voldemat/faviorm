@@ -35,12 +35,16 @@ class VARCHAR(IType):
 class Column(IColumn):
     name: str
     type: IType
+    nullable: bool
 
     def __hash__(self) -> int:
-        return hash((self.name, self.type))
+        return hash((self.name, self.type, self.nullable))
 
     def get_name(self) -> str:
         return self.name
 
     def get_type(self) -> IType:
         return self.type
+
+    def get_is_nullable(self) -> bool:
+        return self.nullable
