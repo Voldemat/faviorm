@@ -7,7 +7,7 @@ on:
   push:
     paths-ignore:
       - README.md
-    tags: ["*"]
+        #tags: ["*"]
       #  pull_request:
       #    types: [opened, edited, synchronize]
       #    paths-ignore:
