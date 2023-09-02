@@ -8,10 +8,10 @@ on:
     paths-ignore:
       - README.md
     tags: ["*"]
-  pull_request:
-    types: [opened, edited, synchronize]
-    paths-ignore:
-      - README.md
+      #  pull_request:
+      #    types: [opened, edited, synchronize]
+      #    paths-ignore:
+      #      - README.md
 
 jobs:
   lintAndTest:
