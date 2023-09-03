@@ -4,7 +4,7 @@ from .difference import diff
 from .hashers import MD5Hasher
 from .icolumn import IColumn
 from .idatabase import IDatabase
-from .isql_struct import ISqlStruct, PType
+from .isql_struct import ISqlStruct
 from .itable import ITable
 from .itype import IType
 from .table import Table
@@ -22,5 +22,4 @@ __all__ = (
     "Column",
     "UUID",
     "VARCHAR",
-    "PType",
 )

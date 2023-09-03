@@ -1,9 +1,9 @@
+from typing import Any
 from unittest import mock
 
 import pytest
 
 import faviorm
-from faviorm import PType
 
 
 @pytest.mark.parametrize("name", ["main", "test", "check"])
@@ -20,7 +20,7 @@ def test_itable(name: str) -> None:
         def get_name(self) -> str:
             return name
 
-        def get_columns(self) -> list[faviorm.IColumn[PType]]:
+        def get_columns(self) -> list[faviorm.IColumn[Any]]:
             return [id_column, name_column]
 
     table = MainTable()
