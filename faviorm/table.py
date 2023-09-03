@@ -1,4 +1,5 @@
 from .icolumn import IColumn
+from .isql_struct import PType
 from .itable import ITable
 
 
@@ -14,7 +15,7 @@ class Table(ITable):
     def get_name(self) -> str:
         return self.table_name
 
-    def get_columns(self) -> list[IColumn]:
+    def get_columns(self) -> list[IColumn[PType]]:
         return list(
             filter(
                 lambda v: isinstance(v, IColumn),

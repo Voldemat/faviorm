@@ -2,12 +2,12 @@ from abc import abstractmethod
 
 from .icolumn import IColumn
 from .ihasher import IHasher
-from .isql_struct import ISqlStruct, map_get_sql_hash
+from .isql_struct import ISqlStruct, PType, map_get_sql_hash
 
 
 class ITable(ISqlStruct):
     @abstractmethod
-    def get_columns(self) -> list[IColumn]:
+    def get_columns(self) -> list[IColumn[PType]]:
         pass
 
     def get_params_hash(self, hasher: IHasher) -> bytes:

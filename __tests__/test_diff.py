@@ -167,3 +167,111 @@ def test_diff_change_nullable_value_of_column() -> None:
             }
         }
     }, diff
+
+
+def test_diff_set_default_value_of_column() -> None:
+    class UsersTable(faviorm.Table):
+        id = faviorm.Column("id", faviorm.VARCHAR(2), True)
+
+    class Users2Table(faviorm.Table):
+        id = faviorm.Column("id", faviorm.VARCHAR(2), True, "default")
+
+    class D1(faviorm.Database):
+        users = UsersTable("users")
+
+    class D2(faviorm.Database):
+        users = Users2Table("users")
+
+    d1 = D1()
+    d2 = D2()
+    diff = faviorm.diff(d1, d2, hasher=hasher)
+    assert diff == {
+        "tables": {
+            "changed": {
+                "users": {
+                    "columns": {
+                        "changed": {
+                            "id": {
+                                "default": {
+                                    "from": UsersTable.id.get_default(),
+                                    "to": Users2Table.id.get_default(),
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, diff
+
+
+def test_diff_delete_default_value_of_column() -> None:
+    class UsersTable(faviorm.Table):
+        id = faviorm.Column("id", faviorm.VARCHAR(2), True, "default")
+
+    class Users2Table(faviorm.Table):
+        id = faviorm.Column("id", faviorm.VARCHAR(2), True)
+
+    class D1(faviorm.Database):
+        users = UsersTable("users")
+
+    class D2(faviorm.Database):
+        users = Users2Table("users")
+
+    d1 = D1()
+    d2 = D2()
+    diff = faviorm.diff(d1, d2, hasher=hasher)
+    assert diff == {
+        "tables": {
+            "changed": {
+                "users": {
+                    "columns": {
+                        "changed": {
+                            "id": {
+                                "default": {
+                                    "from": UsersTable.id.get_default(),
+                                    "to": Users2Table.id.get_default(),
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, diff
+
+
+def test_diff_change_default_value_of_column() -> None:
+    class UsersTable(faviorm.Table):
+        id = faviorm.Column("id", faviorm.VARCHAR(2), True, "default")
+
+    class Users2Table(faviorm.Table):
+        id = faviorm.Column("id", faviorm.VARCHAR(2), True, "another_default")
+
+    class D1(faviorm.Database):
+        users = UsersTable("users")
+
+    class D2(faviorm.Database):
+        users = Users2Table("users")
+
+    d1 = D1()
+    d2 = D2()
+    diff = faviorm.diff(d1, d2, hasher=hasher)
+    assert diff == {
+        "tables": {
+            "changed": {
+                "users": {
+                    "columns": {
+                        "changed": {
+                            "id": {
+                                "default": {
+                                    "from": UsersTable.id.get_default(),
+                                    "to": Users2Table.id.get_default(),
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }, diff
