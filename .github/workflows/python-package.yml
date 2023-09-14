@@ -17,10 +17,17 @@ on:
 jobs:
   lintAndTest:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11"]
+    container: python:3.11
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -35,6 +42,12 @@ jobs:
       run: black --check . && flake8 . && mypy --pretty  .
     - name: Test
       run: coverage run -m pytest --color=yes .
+      env:
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: postgres
     - name: Upload coverage reports to Codecov
       if: github.event_name != 'pull_request'
       uses: codecov/codecov-action@v3
