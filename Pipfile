@@ -14,6 +14,9 @@ pytest = "*"
 ipython = "*"
 coverage = "*"
 pdoc = "*"
+asyncpg = "*"
+asyncpg-stubs = "*"
+pytest-asyncio = "*"
 
 [requires]
 python_version = "3.11"
