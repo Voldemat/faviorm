@@ -7,6 +7,7 @@ from .idatabase import IDatabase
 from .isql_struct import ISqlStruct
 from .itable import ITable
 from .itype import IType
+from .loader import SQLLoader
 from .table import Table
 
 
@@ -22,4 +23,5 @@ __all__ = (
     "Column",
     "UUID",
     "VARCHAR",
+    "SQLLoader",
 )
