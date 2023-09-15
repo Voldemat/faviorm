@@ -7,16 +7,27 @@ on:
   push:
     paths-ignore:
       - README.md
-    branches: [ "main" ]
+    branches: ["*"]
     tags: ["*"]
+  pull_request:
+    types: [opened, edited, synchronize]
+    paths-ignore:
+      - README.md
 
 jobs:
   lintAndTest:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11"]
+    container: python:3.11
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -27,15 +38,24 @@ jobs:
       run: |
         python -m pip install --upgrade pip pipenv
         python -m pipenv install --dev --system
+        git config --global --add safe.directory /__w/faviorm/faviorm
     - name: Lint
       run: black --check . && flake8 . && mypy --pretty  .
     - name: Test
       run: coverage run -m pytest --color=yes .
+      env:
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: postgres
     - name: Upload coverage reports to Codecov
+      if: github.event_name != 'pull_request'
       uses: codecov/codecov-action@v3
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - name: Upload coverage reports to CodeClimate
+      if: github.event_name != 'pull_request'
       uses: paambaati/codeclimate-action@v5.0.0
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CODE_CLIMATE_TOKEN}}
@@ -46,7 +66,7 @@ jobs:
       matrix:
         python-version: ["3.11"]
     needs: ['lintAndTest']
-    if: ${{ github.ref_type == 'tag' }}
+    if: ${{ github.ref_type == 'tag' && github.event_name != 'pull_request' }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}

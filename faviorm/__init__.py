@@ -7,6 +7,7 @@ from .idatabase import IDatabase
 from .isql_struct import ISqlStruct
 from .itable import ITable
 from .itype import IType
+from .loader import SQLLoader
 from .table import Table
 from .types import (
     ARRAY,
@@ -38,4 +39,5 @@ __all__ = (
     "TIMESTAMP",
     "DECIMAL",
     "JSONB",
+    "SQLLoader",
 )
