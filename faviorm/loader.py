@@ -1,6 +1,6 @@
 from typing import Any
 
-from .column import Column, VARCHAR
+from .column import Column
 from .database import Database
 from .icolumn import IColumn
 from .idatabase import IDatabase
@@ -8,6 +8,7 @@ from .iloader import ISQLLoader, ISQLLoaderExecutor
 from .itable import ITable
 from .itype import IType
 from .table import Table
+from .types import VARCHAR
 
 
 QUERIES = {
