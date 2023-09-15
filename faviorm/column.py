@@ -1,36 +1,8 @@
-import uuid
 from dataclasses import dataclass
-from typing import Literal
 
 from .icolumn import IColumn
-from .ihasher import IHasher
 from .isql_struct import PType
 from .itype import IType
-
-
-class UUID(IType[uuid.UUID]):
-    def get_name(self) -> Literal["UUID"]:
-        return "UUID"
-
-    def __hash__(self) -> int:
-        return hash(self.get_name())
-
-    def get_params_hash(self, hasher: IHasher) -> bytes:
-        return b""
-
-
-@dataclass
-class VARCHAR(IType[str]):
-    max_length: int
-
-    def get_name(self) -> Literal["VARCHAR"]:
-        return "VARCHAR"
-
-    def __hash__(self) -> int:
-        return hash((self.get_name(), self.max_length))
-
-    def get_params_hash(self, hasher: IHasher) -> bytes:
-        return hasher.hash(str(self.max_length).encode())
 
 
 @dataclass

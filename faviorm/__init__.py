@@ -1,4 +1,4 @@
-from .column import Column, UUID, VARCHAR
+from .column import Column
 from .database import Database
 from .difference import diff
 from .hashers import MD5Hasher
@@ -9,6 +9,17 @@ from .itable import ITable
 from .itype import IType
 from .loader import SQLLoader
 from .table import Table
+from .types import (
+    ARRAY,
+    BOOLEAN,
+    DECIMAL,
+    ENUM,
+    INTEGER,
+    JSONB,
+    TIMESTAMP,
+    UUID,
+    VARCHAR,
+)
 
 
 __all__ = (
@@ -23,5 +34,10 @@ __all__ = (
     "Column",
     "UUID",
     "VARCHAR",
+    "ENUM",
+    "ARRAY",
+    "TIMESTAMP",
+    "DECIMAL",
+    "JSONB",
     "SQLLoader",
 )
