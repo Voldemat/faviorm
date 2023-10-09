@@ -17,6 +17,7 @@ pdoc = "*"
 asyncpg = "*"
 asyncpg-stubs = "*"
 pytest-asyncio = "*"
+pytest-mypy-testing = "*"
 
 [requires]
 python_version = "3.11"
