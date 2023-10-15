@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from setuptools import find_packages, setup  # type: ignore [import]
+from setuptools import find_packages, setup  # type: ignore [import-untyped]
 
 
 setup(

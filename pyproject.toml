@@ -10,4 +10,4 @@ log_cli_level = "DEBUG"
 [tool.mypy]
 strict=true
 plugins=["faviorm/mypy_plugin.py"]
-exclude=["setup.py"]
+exclude = "__tests__/test_mypy_types.py"
