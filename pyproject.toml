@@ -9,3 +9,5 @@ log_cli_level = "DEBUG"
 
 [tool.mypy]
 strict=true
+plugins=["faviorm/mypy_plugin.py"]
+exclude=["setup.py"]

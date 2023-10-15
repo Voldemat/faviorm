@@ -4,7 +4,7 @@ from typing import Iterable, TypeVar
 
 from .ihasher import IHasher
 
-PType = TypeVar("PType")
+PType = TypeVar("PType", covariant=True)
 
 
 class ISqlStruct(ABC, Hashable):
